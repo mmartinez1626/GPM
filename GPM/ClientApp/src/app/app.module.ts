@@ -19,6 +19,13 @@ import { KanbanComponent } from './kanban/kanban.component';
 import { KanbanboardComponent } from './kanbanboard/kanbanboard.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+import { TableModule } from 'primeng/table';
+
+import { ButtonModule } from 'primeng/button';
+import { DialogModule } from 'primeng/dialog';
+import { InputTextModule } from 'primeng/inputtext';
+import { DropdownModule } from 'primeng/dropdown';
+
 @NgModule({
     declarations: [
         AppComponent,
@@ -37,11 +44,18 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
         HttpClientModule,
         FormsModule,
         BrowserAnimationsModule,
+        TableModule,
+        ButtonModule,
+        DialogModule,
+        DropdownModule,
+        InputTextModule,
         ApiAuthorizationModule,
         RouterModule.forRoot([
             { path: '', component: HomeComponent, pathMatch: 'full' },
             { path: 'counter', component: CounterComponent },
             { path: 'fetch-data', component: FetchDataComponent, canActivate: [AuthorizeGuard] },
+            { path: 'category', component: CategoryComponent },
+            { path: 'sub-category', component: SubCategoryComponent }
         ])
     ],
     providers: [

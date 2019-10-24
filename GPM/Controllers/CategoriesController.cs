@@ -48,6 +48,14 @@ namespace GPM.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCategory(int id, Category category)
         {
+
+            //var tempCat = _context.Categories.FirstOrDefault(c => c.Name == category.Name);
+
+            //if (tempCat == null)
+            //{
+            //    return NotFound();
+            //}
+
             if (id != category.Id)
             {
                 return BadRequest();

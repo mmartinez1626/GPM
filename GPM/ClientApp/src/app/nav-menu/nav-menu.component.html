@@ -1,5 +1,5 @@
 <header>
-  <nav
+  <!--<nav
     class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3"
   >
     <div class="container">
@@ -21,24 +21,69 @@
       >
         <app-login-menu></app-login-menu>
         <ul class="navbar-nav flex-grow">
-          <li
-            class="nav-item"
-            [routerLinkActive]="['link-active']"
-            [routerLinkActiveOptions]="{ exact: true }"
-          >
+          <li class="nav-item"
+              [routerLinkActive]="['link-active']"
+              [routerLinkActiveOptions]="{ exact: true }">
             <a class="nav-link text-dark" [routerLink]="['/']">Home</a>
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/counter']"
-              >Counter</a
-            >
+            <a class="nav-link text-dark" [routerLink]="['/counter']">Counter</a>
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/fetch-data']"
-              >Fetch data</a
-            >
+            <a class="nav-link text-dark" [routerLink]="['/fetch-data']">Fetch data</a>
+          </li>
+          <li class="nav-item" [routerLinkActive]="['link-active']">
+            <a class="nav-link text-dark" [routerLink]="['/category']">Categories</a>
           </li>
         </ul>
+      </div>
+    </div>
+  </nav>-->
+  <nav class="navbar is-dark" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+      <a class="navbar-item" [routerLink]="['/']">GPM</a>
+
+      <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+
+    <div id="navbarBasicExample" class="navbar-menu">
+      <div class="navbar-start">
+        <a class="navbar-item"
+           [routerLinkActive]="['link-active']"
+           [routerLinkActiveOptions]="{ exact: true }" [routerLink]="['/']">
+          Home
+        </a>
+
+        <a class="navbar-item" [routerLinkActive]="['link-active']" [routerLink]="['/counter']">
+          Counter
+        </a>
+
+        <a class="navbar-item" [routerLinkActive]="['link-active']" [routerLink]="['/fetch-data']">
+          Fetch data
+        </a>
+        <a class="navbar-item" [routerLinkActive]="['link-active']" [routerLink]="['/category']">
+          Categories
+        </a>
+        <a class="navbar-item" [routerLinkActive]="['link-active']" [routerLink]="['/sub-category']">
+          Sub Categories
+        </a>
+      </div>
+
+      <div class="navbar-end">
+        <div class="navbar-item">
+          <div class="buttons">
+            <a class="button is-success is-rounded">
+              <strong>Sign up</strong>
+            </a>
+            <a class="button is-link is-rounded">
+              Log in
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   </nav>
