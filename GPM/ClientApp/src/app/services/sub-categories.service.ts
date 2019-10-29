@@ -33,6 +33,6 @@ export class SubCategoriesService {
     }
 
     public UpdateSubCategory(id: any, subCategory: any) {
-        return this.http.put<any>(this.url + 'api/Categories/' + id, subCategory);
+        return this.http.put<any>(this.url + 'api/SubCategories/' + id, subCategory);
     }
 }

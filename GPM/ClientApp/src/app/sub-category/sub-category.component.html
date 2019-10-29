@@ -32,7 +32,7 @@
           <label for="subCategoryName">Sub Category Name</label>
         </div>
         <div class="ui-g-8">
-          <input pInputText id="subCategoryName" [(ngModel)]="subCat.name" />
+          <input pInputText id="subCategoryName" [(ngModel)]="subCat.subCatsName" />
         </div>
       </div>
       <div class="ui-g-12">
@@ -40,7 +40,7 @@
           <label for="categoryName">Parent Category</label>
         </div>
         <div class="ui-g-8">
-          <p-dropdown [options]="categories" [(ngModel)]="subCat.categoryId" optionLabel="name"></p-dropdown>
+          <p-dropdown [options]="categories" [(ngModel)]="parentCategory" optionLabel="name"></p-dropdown>
         </div>
       </div>
     </div>

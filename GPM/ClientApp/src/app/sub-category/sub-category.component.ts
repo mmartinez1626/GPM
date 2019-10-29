@@ -22,9 +22,9 @@ export class SubCategoryComponent implements OnInit {
 
     newSubCat: boolean;
 
-    subCats: any[];
+    subCats: any[] = [];
 
-    tempCat: any;
+    tempCat: any[] = [];
 
     cats: any[] = [];
 
@@ -38,6 +38,8 @@ export class SubCategoryComponent implements OnInit {
 
     selectedCategory: Category;
 
+    parentCategory: any;
+
     constructor(private subCategoryService: SubCategoriesService) {
         this.getDropdownData();
     }
@@ -46,7 +48,7 @@ export class SubCategoryComponent implements OnInit {
         this.getCategories();
 
         this.cols = [
-            { field: 'subCats', header: 'Name' },
+            { field: 'subCatsName', header: 'Name' },
             { field: 'cats', header: 'Parent Category'}
         ];
 
@@ -55,18 +57,19 @@ export class SubCategoryComponent implements OnInit {
 
     getDropdownData() {
         this.subCategoryService.GetCategories().subscribe(data => {
-            console.log(data);
+            //console.log(data);
             for (var i = 0; i < data.length; i++) {
                 var tempCategory = {
                     name: data[i].name,
-                    categoryId: data[i].id
+                    categoryId: data[i].id,
                 }
-                console.log(tempCategory);
+                //console.log(tempCategory);
                 this.tempCategories.push(tempCategory);
             }
 
             if (this.tempCategories != null || this.tempCategories != undefined || this.tempCategories.length != 0) {
                 this.categories = this.tempCategories;
+                this.parentCategory = this.tempCategories[0];
             }
         });
     }
@@ -74,27 +77,32 @@ export class SubCategoryComponent implements OnInit {
     getCategories() {
         this.subCategoryService.GetSubCategories().subscribe(result => {
             if (result != null || result != undefined) {
-                console.log(result);
+                this.tempResult = result;
+                
                 for (var i = 0; i < result.length; i++) {
-                    //console.log(result[i]);
-                    this.tempResult = result[i];
+                    console.log(result[i]);
                     this.subCategoryService.GetSpecificCategories(result[i].categoryId).subscribe(data => {
                         //console.log(data);
-                        this.tempCat = data.name;
+                        this.tempCat.push(data.name);
+                    }); 
+                }
+                this.delay(1000).then(_ => {
+                    for (var i = 0; i < this.tempResult.length; i++) {
                         //console.log(this.tempResult);
                         var tempSubCats = {
-                            subCats: this.tempResult.name,
-                            cats: this.tempCat
+                            subCatsName: this.tempResult[i].name,
+                            cats: this.tempCat[i],
+                            subCatsId: this.tempResult[i].id
                         }
-                        this.cats.push(tempSubCats);
-                    });
-                }
-                if (this.cats != null || this.cats != undefined || this.cats.length != 0) {
-                    this.subCats = this.cats;
-                    //console.log(this.subCats);
-                }  
+                        this.subCats.push(tempSubCats);
+                    }
+                   });
             }
         });
+    }
+
+    async delay(ms: number) {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
 
     showDialogToAdd() {
@@ -104,29 +112,27 @@ export class SubCategoryComponent implements OnInit {
     }
 
     save() {
-        let subCats = [...this.subCats];
-        if (this.newSubCat) {
-            subCats.push(this.subCat);
-            this.subCategoryService.PostSubCategories(this.subCat).subscribe(result => {
-                console.log(result);
-                this.getCategories();
-            });
-        }
-        else {
-            subCats[this.subCats.indexOf(this.selectedSubCat)] = this.subCat;
-        }
-
-        this.subCats = subCats;
+        console.log(this.parentCategory.categoryId);
+        console.log(this.subCat.subCatsName);
+        var pCategory = {
+            name: this.subCat.subCatsName,
+            categoryId: this.parentCategory.categoryId
+        };
+        this.subCategoryService.PostSubCategories(pCategory).subscribe(result => {
+            this.subCats = [];
+          console.log(result);
+          this.getCategories();
+        });
         this.subCat = null;
         this.displayDialog = false;
     }
 
     delete() {
-        this.subCategoryService.DeleteSubCategory(this.selectedSubCat.id).subscribe(result => {
+        console.log(this.subCat);
+        this.subCategoryService.DeleteSubCategory(this.subCat.subCatsId).subscribe(result => {
             console.log(result);
             if (result !== null || result !== undefined) {
-                let index = this.subCats.indexOf(this.selectedSubCat);
-                this.subCats = this.subCats.filter((val, i) => i != index);
+                this.subCats = [];
                 this.subCat = null;
                 this.displayDialog = false;
                 this.getCategories();
@@ -135,6 +141,7 @@ export class SubCategoryComponent implements OnInit {
     }
 
     onRowSelect(event) {
+        //console.log(event.data);
         this.newSubCat = false;
         this.subCat = this.cloneCar(event.data);
         this.displayDialog = true;
@@ -149,13 +156,19 @@ export class SubCategoryComponent implements OnInit {
     }
 
     update() {
-        console.log(this.selectedSubCat);
         console.log(this.subCat);
-        this.subCategoryService.UpdateSubCategory(this.subCat.id, this.subCat).subscribe(result => {
+        console.log(this.parentCategory);
+        var tempSubCat = {
+            name: this.subCat.subCatsName,
+            categoryId: this.parentCategory.categoryId,
+            id: this.subCat.subCatsId
+        }
+        this.subCategoryService.UpdateSubCategory(this.subCat.subCatsId, tempSubCat).subscribe(result => {
             console.log(result);
+            this.subCats = [];
             this.displayDialog = false;
             this.getCategories();
-        })
+        });
     }
 
 }
