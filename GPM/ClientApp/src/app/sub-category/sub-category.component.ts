@@ -47,9 +47,14 @@ export class SubCategoryComponent implements OnInit {
     ngOnInit() {
         this.getCategories();
 
+        //this.cols = [
+        //    { field: 'subCatsName', header: 'Name' },
+        //    { field: 'cats', header: 'Parent Category'}
+        //];
+
         this.cols = [
-            { field: 'subCatsName', header: 'Name' },
-            { field: 'cats', header: 'Parent Category'}
+            { field: 'name', header: 'Name' },
+            { field: 'category', subfield: 'name', header: 'Parent Category' }
         ];
 
         
@@ -78,25 +83,28 @@ export class SubCategoryComponent implements OnInit {
         this.subCategoryService.GetSubCategories().subscribe(result => {
             if (result != null || result != undefined) {
                 this.tempResult = result;
+                console.log(result);
+
+                this.subCats = result;
                 
-                for (var i = 0; i < result.length; i++) {
-                    console.log(result[i]);
-                    this.subCategoryService.GetSpecificCategories(result[i].categoryId).subscribe(data => {
-                        //console.log(data);
-                        this.tempCat.push(data.name);
-                    }); 
-                }
-                this.delay(1000).then(_ => {
-                    for (var i = 0; i < this.tempResult.length; i++) {
-                        //console.log(this.tempResult);
-                        var tempSubCats = {
-                            subCatsName: this.tempResult[i].name,
-                            cats: this.tempCat[i],
-                            subCatsId: this.tempResult[i].id
-                        }
-                        this.subCats.push(tempSubCats);
-                    }
-                   });
+                //for (var i = 0; i < result.length; i++) {
+                //    console.log(result[i]);
+                //    this.subCategoryService.GetSpecificCategories(result[i].categoryId).subscribe(data => {
+                //        //console.log(data);
+                //        this.tempCat.push(data.name);
+                //    }); 
+                //}
+                //this.delay(1000).then(_ => {
+                //    for (var i = 0; i < this.tempResult.length; i++) {
+                //        //console.log(this.tempResult);
+                //        var tempSubCats = {
+                //            subCatsName: this.tempResult[i].name,
+                //            cats: this.tempCat[i],
+                //            subCatsId: this.tempResult[i].id
+                //        }
+                //        this.subCats.push(tempSubCats);
+                //    }
+                //});
             }
         });
     }
@@ -113,9 +121,9 @@ export class SubCategoryComponent implements OnInit {
 
     save() {
         console.log(this.parentCategory.categoryId);
-        console.log(this.subCat.subCatsName);
+        console.log(this.subCat.name);
         var pCategory = {
-            name: this.subCat.subCatsName,
+            name: this.subCat.name,
             categoryId: this.parentCategory.categoryId
         };
         this.subCategoryService.PostSubCategories(pCategory).subscribe(result => {
@@ -129,7 +137,7 @@ export class SubCategoryComponent implements OnInit {
 
     delete() {
         console.log(this.subCat);
-        this.subCategoryService.DeleteSubCategory(this.subCat.subCatsId).subscribe(result => {
+        this.subCategoryService.DeleteSubCategory(this.subCat.id).subscribe(result => {
             console.log(result);
             if (result !== null || result !== undefined) {
                 this.subCats = [];
@@ -141,9 +149,10 @@ export class SubCategoryComponent implements OnInit {
     }
 
     onRowSelect(event) {
-        //console.log(event.data);
+        console.log(event.data.category.name);
         this.newSubCat = false;
         this.subCat = this.cloneCar(event.data);
+        //this.parentCategory = event.data.category.name;
         this.displayDialog = true;
     }
 
@@ -155,15 +164,19 @@ export class SubCategoryComponent implements OnInit {
         return subCat;
     }
 
+    SelectedSubCat() {
+        console.log(this.parentCategory.categoryId);
+    }
+
     update() {
         console.log(this.subCat);
         console.log(this.parentCategory);
         var tempSubCat = {
-            name: this.subCat.subCatsName,
+            name: this.subCat.name,
             categoryId: this.parentCategory.categoryId,
-            id: this.subCat.subCatsId
+            id: this.subCat.id
         }
-        this.subCategoryService.UpdateSubCategory(this.subCat.subCatsId, tempSubCat).subscribe(result => {
+        this.subCategoryService.UpdateSubCategory(this.subCat.id, tempSubCat).subscribe(result => {
             console.log(result);
             this.subCats = [];
             this.displayDialog = false;

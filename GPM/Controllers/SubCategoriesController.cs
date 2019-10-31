@@ -25,7 +25,7 @@ namespace GPM.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<SubCategory>>> GetSubCategories()
         {
-            return await _context.SubCategories.ToListAsync();
+            return await _context.SubCategories.Include("Category").ToListAsync();
         }
 
         // GET: api/SubCategories/5
