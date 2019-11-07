@@ -26,6 +26,15 @@ import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { DropdownModule } from 'primeng/dropdown';
 
+import { SidebarModule } from 'primeng/sidebar';
+import { ProjectsComponent } from './projects/projects.component';
+
+import { DataViewModule } from 'primeng/dataview';
+
+
+
+
+
 @NgModule({
     declarations: [
         AppComponent,
@@ -37,7 +46,8 @@ import { DropdownModule } from 'primeng/dropdown';
         CategoryComponent,
         SubCategoryComponent,
         KanbanComponent,
-        KanbanboardComponent
+        KanbanboardComponent,
+        ProjectsComponent
     ],
     imports: [
         BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -47,6 +57,8 @@ import { DropdownModule } from 'primeng/dropdown';
         TableModule,
         ButtonModule,
         DialogModule,
+        SidebarModule,
+        DataViewModule,
         DropdownModule,
         InputTextModule,
         ApiAuthorizationModule,
@@ -55,7 +67,8 @@ import { DropdownModule } from 'primeng/dropdown';
             { path: 'counter', component: CounterComponent },
             { path: 'fetch-data', component: FetchDataComponent, canActivate: [AuthorizeGuard] },
             { path: 'category', component: CategoryComponent },
-            { path: 'sub-category', component: SubCategoryComponent }
+            { path: 'sub-category', component: SubCategoryComponent },
+            { path: 'projects', component: ProjectsComponent }
         ])
     ],
     providers: [
